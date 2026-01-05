@@ -1,0 +1,8 @@
+Routes
+Admin
+1. Login/ (id,pass)// return token 
+2. AddStop/ (stop nm,token)[stop id , becon_id,secret key] // return sucessfull
+3. AddRoute/ (rount nm , route no , direction ,ET,stops[stop_nm,ET_from_prev ,seq_no]) [rout id,route_stop_id] // return sucessfull
+4.AddBus/ (bus_no , depo, status)[bus_id]//return sucessfull
+5. AddTrip / (route_no or nm , bus_no ,driver_nm , conductor_nm,start_time , end_time,status) // return sucessfull
+6.

@@ -1,0 +1,134 @@
+Technolgy Using:
+1.RFID
+Limited Range for Passive Tags
+Passive RFID tags need to be very close (a few meters) to the reader to work, which makes it unreliable for moving buses unless they slow down or stop near the reader.
+
+High Cost for Large Deployment
+Every bus stop would require a separate RFID reader setup, power source, and network link — making it expensive and difficult to maintain city-wide.
+
+Complex Installation & Maintenance
+Readers need precise alignment, proper antenna placement, and weatherproof casing. This setup becomes complicated and less practical for outdoor public stops.
+
+Poor Performance at Vehicle Speed
+Passive RFID signals may not activate long enough when the bus passes at normal traffic speed, leading to missed reads and inaccurate tracking.
+
+Cheaper, More Reliable Alternatives Exist
+Bluetooth beacons, GPS-assisted systems, or driver app triggers can provide the same tracking accuracy with lower cost, easier setup, and better scalability.
+
+
+Bluetooth Beacon 
+nRF52832 module BLE final
+
+Here’s a **clean, practical feature list** for your **NMMT Bus Tracking & Management Web App**, organized by role and function.
+No filler — just what actually matters.
+
+---
+
+## 🧭 **Main Objective**
+
+Track buses using BLE-based detection at stops, show latest bus positions, and provide full management control for the admin.
+
+---
+
+## 🚍 **Core Features (Phase 1 - MVP)**
+
+### 🔹 **1. Bus Tracking**
+
+* Detect bus presence near a stop using BLE signal.
+* Bus-side device sends `{bus_id, stop_id, timestamp}` to server.
+* Server updates each bus’s last known stop and time.
+* Display status like:
+
+  > *Bus 42 last passed CBD Belapur 3 min ago*
+
+---
+
+### 🔹 **2. Admin Dashboard**
+
+* Secure login for admin (JWT / password auth).
+* Dashboard showing:
+
+  * Total active buses
+  * Recently updated buses
+  * Alerts for inactive ones (no update in X minutes)
+* Table or cards view for:
+
+  * Bus number, type, route, driver, conductor
+  * Last stop + time
+  * Current status (Running / Idle / Maintenance)
+* CRUD operations (Add/Edit/Delete):
+
+  * Buses
+  * Stops
+  * Routes
+  * Drivers
+  * Conductors
+
+---
+
+### 🔹 **3. Route Management**
+
+* Create route by selecting stops in order.
+* View all stops on map (Google Maps or Leaflet).
+* Assign route to specific bus.
+
+---
+
+### 🔹 **4. Bus, Driver & Conductor Details**
+
+* Each bus linked with:
+
+  * Bus number (ID)
+  * Type (AC / Non-AC / Electric)
+  * Assigned route
+  * Driver name, contact, license
+  * Conductor name, contact
+* Option to change assignments easily.
+
+---
+
+### 🔹 **5. Public View (Passenger Interface)**
+
+* Search by bus number or route.
+* Show current / last known stop and time.
+* Optional mini map to show route & bus progress.
+
+---
+
+### 🔹 **6. Logs & History**
+
+* Store all detections in a log collection.
+* View timeline of bus movement for a particular day.
+* Option to filter by bus or route.
+
+---
+
+### 🔹 **7. Notification / Status Alerts**
+
+* Highlight buses that haven’t sent data for more than a threshold time (e.g., 10 mins).
+* Optional email or on-screen alert to admin.
+
+---
+
+## ⚙️ **Technical Features**
+
+* BLE-based detection (no GPS needed).
+* Real-time updates using WebSocket or polling.
+* RESTful API for bus device uploads.
+* Role-based access (Admin / Public).
+* Responsive web design for mobile & desktop.
+
+---
+
+## 🧠 **Phase 2 (Future Add-ons)**
+
+* ETA prediction (based on average travel time).
+* Driver/conductor attendance or shift tracking.
+* Battery status of BLE beacon or bus device.
+* Maintenance scheduling.
+* Multi-admin management.
+
+---
+
+If you want, I can now create a **final project feature summary table** — the one you’d include in your report or documentation (with columns: *Feature Name*, *Description*, *User Type*).
+Do you want me to draft that next?
