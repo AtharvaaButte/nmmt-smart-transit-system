@@ -13,3 +13,7 @@ export function getJWTSecret() {
 export function getJWTTokenExpireTime() {
     return process.env.JWT_EXPIRES_IN;
 }
+
+export function getAdminName() {
+    return process.env.SUPER_ADMIN_USERNAME;
+}

@@ -1,6 +1,8 @@
 import postgres from 'postgres'
-import {getDBUrl} from '../config/env.js'       
+import { getDBUrl } from '../config/env.js'
 
-const sql = postgres(getDBUrl())
+const connectionString = getDBUrl() 
 
-export default sql;
+const sql = postgres(connectionString)
+
+export default sql
