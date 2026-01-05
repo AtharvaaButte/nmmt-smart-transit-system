@@ -1,0 +1,52 @@
+# =============================
+# Environment variables
+# =============================
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+
+# =============================
+# Node.js
+# =============================
+backend/node_modules/
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+
+# =============================
+# Build outputs
+# =============================
+backend/dist/
+backend/build/
+
+
+# =============================
+# Logs
+# =============================
+backend/logs/
+backend/*.log
+
+
+# =============================
+# Database dumps / backups
+# =============================
+backend/*.sql
+backend/*.dump
+backend/*.bak
+
+
+# =============================
+# IDE / Editor
+# =============================
+.vscode/
+.idea/
+*.swp
+
+
+# =============================
+# OS files
+# =============================
+.DS_Store
+Thumbs.db
