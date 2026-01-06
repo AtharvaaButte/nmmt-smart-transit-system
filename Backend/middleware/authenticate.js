@@ -1,14 +1,11 @@
 import { verifyToken } from '../utils/jwt.js'
-
+import AppError from '.././utils/appError.js'
 // 
-export function auth(req, res, next) {
+export function authenticate(req, res, next) {
  
         const authHeader = req.headers.authorization;
         if (!authHeader || authHeader.startsWith('Bearer ')) {
-            const error = new Error('Authentication header not exicst!')
-            error.statusCode = 401;
-            error.isOperational = true;
-            throw error;
+            return new AppError('Authentication failed: Missing Bearer token!',401);
         }
         const token = authHeader.split(' ')[1];
         const payload = verifyToken(token)
