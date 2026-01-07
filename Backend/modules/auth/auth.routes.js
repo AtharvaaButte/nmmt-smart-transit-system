@@ -1,8 +1,12 @@
 import express from 'express'   
+import { login } from './auth.controller.js';
 
 const router = express.Router();
 
 // APIs
 
-// Sign Up Admin 
+// Login API
 
+router.post('/auth/login',login)
+
+export default router;

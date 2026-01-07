@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import sql from '../db.js';
 import { geratePasswrod } from '../../utils/password.js';
 import {getAdminName} from '../../config/env.js'
+import { error } from 'console';
 
 async function createSuperAdmin() { 
 
@@ -30,6 +31,7 @@ process.exit(0);
 })
 .catch((err)=>{
     console.error('Failed to create Super Admin.');
+    console.log(error);
     console.error(err.message);
     process.exit(1);
 })
