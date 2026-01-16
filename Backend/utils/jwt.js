@@ -8,5 +8,5 @@ export function signToken(paylaod) {
 }
 
 export function verifyToken(token) {
-    // return jwt.verify(token,getJWTSecret())
+    return jwt.verify(token,getJWTSecret())
 }

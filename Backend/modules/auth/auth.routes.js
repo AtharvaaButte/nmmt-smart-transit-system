@@ -7,6 +7,6 @@ const router = express.Router();
 
 // Login API
 
-router.post('/auth/login',login)
+router.post('/login',login)
 
 export default router;

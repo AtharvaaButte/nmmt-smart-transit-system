@@ -16,7 +16,7 @@ export async function addAdminInDB(username,phone_no,admin_nm,password_hash,crea
      ${password_hash},
      ${created_by_id})
      
-     RETURNING *
+     RETURNING username, phone_no, admin_nm
      `;
     return result[0];
     }

@@ -1,19 +1,20 @@
+import AppError from "../utils/appError.js";
+import { ERROR_CODES } from "../utils/errorCodes.js";
 
 export function authorize(...allowedRoles) {
     return (req,res,next)=>{
+        console.log("Authoring...");
+        
         if(!req.user){
-            const error = new Error('Unauthorized: No user found')
-            error.statusCode = 401;
-            error.isOperational = true;
-            throw error;
+            const error = new AppError('Unauthorized: No user found',401,ERROR_CODES.AUTH_USER_NOT_FOUND)
+            next(error);
         }
         
         if (!allowedRoles.includes(req.user.role)) {
-            const error =  new Error("Forbidden: You don't have permission to perform this action.")
-            error.statusCode = 403;
-            error.isOperational = true;
-            throw error;
+            const error =  new AppError("Forbidden: You don't have permission to perform this action.",403,ERROR_CODES.AUTH_FORBIDDEN)
+            next(error);
         }
+        
         next();
     }
 }
