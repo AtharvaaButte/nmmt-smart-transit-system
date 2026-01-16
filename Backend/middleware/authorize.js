@@ -14,6 +14,7 @@ export function authorize(...allowedRoles) {
             const error =  new AppError("Forbidden: You don't have permission to perform this action.",403,ERROR_CODES.AUTH_FORBIDDEN)
             next(error);
         }
+        console.log('Authoring done');
         
         next();
     }
