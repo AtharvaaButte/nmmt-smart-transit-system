@@ -21,7 +21,6 @@ backend/yarn-error.log*
 backend/dist/
 backend/build/
 
-
 # =============================
 # Logs
 # =============================
@@ -50,3 +49,9 @@ backend/*.bak
 # =============================
 .DS_Store
 Thumbs.db
+
+# =============================
+# temp for testing
+# =============================
+
+backend/temp

@@ -5,3 +5,8 @@ export const ROLES = {
     EMPLOYEE: 'employee',
     PASSENGER:   'passenger'
 };
+
+export const EMPLOYEE_ROLES = {
+    DRIVER:    'driver',
+    CONDUCTOR: 'conductor'
+}

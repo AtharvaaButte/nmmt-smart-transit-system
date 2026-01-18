@@ -35,7 +35,6 @@ export async function addRouteInDB(route_nm, route_no, estimated_time, stops_inf
         `
         return result[0].stops = newStops;
         
-
     })
     
     return result;

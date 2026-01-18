@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue System Palette Generator</title>
+    <style>
+        :root {
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: #f4f5f7;
+            padding: 40px;
+            color: #172B4D;
+        }
+
+        h1 { margin-bottom: 10px; }
+        p { margin-bottom: 30px; color: #5E6C84; }
+
+        /* HEADER PALETTE STRIP */
+        .palette-strip {
+            display: flex;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 50px;
+        }
+        
+        .swatch {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .swatch:hover {
+            transform: scale(1.05);
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        /* GRID LAYOUT */
+        .section-title {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #dfe1e6;
+            padding-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            padding: 24px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.1s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .sample-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .code-label {
+            font-size: 11px;
+            opacity: 0.8;
+            font-family: monospace;
+        }
+
+        /* TOAST NOTIFICATION */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 14px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Smart Bus System Palette</h1>
+    <p>Click any color block or card to copy the Hex code.</p>
+
+    <div id="palette-strip" class="palette-strip"></div>
+
+    <div id="matrix-container"></div>
+
+    <div id="toast">Copied to clipboard!</div>
+
+    <script>
+        // YOUR PALETTE
+        const colors = [
+            "#e3f2fd", "#bbdefb", "#90caf9", "#64b5f6", "#42a5f5", 
+            "#2196f3", "#1e88e5", "#1976d2", "#1565c0", "#0d47a1"
+        ];
+
+        const container = document.getElementById('matrix-container');
+        const strip = document.getElementById('palette-strip');
+        const toast = document.getElementById('toast');
+
+        // 1. GENERATE TOP STRIP
+        colors.forEach(color => {
+            const div = document.createElement('div');
+            div.className = 'swatch';
+            div.style.backgroundColor = color;
+            
+            // Auto-detect text color for the label (Black or White)
+            // Simple logic: if hex is light, use dark text.
+            const isDark = parseInt(color.replace('#', ''), 16) < 0xffffff / 2;
+            div.style.color = isDark ? '#FFF' : '#000';
+            
+            div.innerText = color;
+            div.onclick = () => copyToClipboard(color);
+            strip.appendChild(div);
+        });
+
+        // 2. GENERATE COMBINATIONS
+        // We will create sections based on BACKGROUND color
+        colors.forEach(bgColor => {
+            
+            // Create Section Header
+            const title = document.createElement('div');
+            title.className = 'section-title';
+            title.innerHTML = `Background: <span style="font-family:monospace; background:${bgColor}; padding:4px 8px; border-radius:4px;">${bgColor}</span>`;
+            container.appendChild(title);
+
+            // Create Grid for this section
+            const grid = document.createElement('div');
+            grid.className = 'grid-container';
+
+            // Loop through Text Colors
+            colors.forEach(textColor => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.backgroundColor = bgColor;
+                card.style.color = textColor;
+                card.onclick = () => copyToClipboard(textColor);
+
+                card.innerHTML = `
+                    <div class="sample-text">Smart Bus</div>
+                    <div class="code-label">Text: ${textColor}</div>
+                `;
+                
+                // Optional: visual border if colors match exactly
+                if(bgColor === textColor) {
+                    card.style.border = "2px dashed #999";
+                    card.innerHTML = `<div class="code-label" style="color:#666">Invisible</div>`;
+                }
+
+                grid.appendChild(card);
+            });
+
+            container.appendChild(grid);
+        });
+
+        // UTILITY: Copy function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                toast.innerText = `Copied ${text} to clipboard!`;
+                toast.className = "show";
+                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>

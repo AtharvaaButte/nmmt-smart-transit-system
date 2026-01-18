@@ -5,6 +5,8 @@ import employeeRouter from './/.//modules/employee/employee.routes.js'
 import stopRouter from './modules/stop/stop.routes.js'
 import routeRouter from './modules/route/route.routes.js'
 import busRouter from './modules/bus/bus.routes.js'
+import tripRouter from './modules/trip/trip.routes.js'
+
 import { globalErrorHandler } from './middleware/errorHandler.js';
 const app = express();
 
@@ -22,5 +24,7 @@ app.use('/route',routeRouter);
 
 app.use('/bus',busRouter);
 
-app.use(globalErrorHandler);
+app.use('/trip',tripRouter);
+
+    app.use(globalErrorHandler);
 export default app;
