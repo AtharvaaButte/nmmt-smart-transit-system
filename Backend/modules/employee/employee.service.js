@@ -1,26 +1,60 @@
 import sql from '../../database/db.js'
+import { EMPLOYEE_ROLES, ROLES } from '../../utils/role.js';
 
-export async function addEmployeeInDB(emp_nm, username, emp_phone_no, password_hash, role, created_by) {
+export async function addEmployeeInDB(emp_nm, username, mobile_no, password_hash, profile_img_url, role, created_by_id) {
+    const result = await sql.begin(async (tsx) => {
+        console.log(`
+            ${username},
+            ${password_hash},
+            ${emp_nm},
+            ${mobile_no},
+            ${profile_img_url},
+            ${ROLES.EMPLOYEE}`);
 
-    const result = await sql `INSERT INTO employee (
-    emp_nm, 
-    username, 
-    phone_no, 
-    password_hash, 
-    role, 
-    created_by
-    ) 
+        const resultAccount = await tsx`
+            INSERT INTO account 
+            (
+            username, 
+            password_hash, 
+            name,
+            mobile_no, 
+            profile_img_url, 
+            role 
+            )
+            VALUES
+            (
+            ${username},
+            ${password_hash},
+            ${emp_nm},
+            ${mobile_no},
+            ${profile_img_url},
+            ${ROLES.EMPLOYEE}
+            )
+        RETURNING account_id , username, mobile_no, name
+        `
+        const employee_id = resultAccount[0].account_id;
+        console.log(`
+                 ${employee_id},
+         ${role}
+         ${created_by_id}`);
 
-    VALUES (
-    
-    ${emp_nm},
-    ${username},
-    ${emp_phone_no}, 
-    ${password_hash}, 
-    ${role}, 
-    ${created_by}
-    )
-    RETURNING emp_nm, username, phone_no, role
-    `
-    return result[0];
+        await tsx`
+         INSERT INTO employee (
+         emp_id,
+         role,
+         created_by 
+        ) 
+         VALUES
+         (
+         ${employee_id},
+         ${role},
+         ${created_by_id}
+         )         
+         `;
+        resultAccount[0].subrole = role;
+        return resultAccount[0];
+
+    })
+
+    return result;
 }
