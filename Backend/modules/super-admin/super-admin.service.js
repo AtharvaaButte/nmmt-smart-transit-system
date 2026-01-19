@@ -1,28 +1,43 @@
 import sql from '../../database/db.js'
+import { ROLES } from '../../utils/role.js';
 
-export async function addAdminInDB(username, phone_no, admin_nm, password_hash, created_by_id) {
+export async function addAdminInDB(username,  password_hash, admin_nm, mobile_no, profile_img_url, created_by_id) {
     const result = await sql.begin(async (tsx) => {
         const resultAccount = await tsx`
-        
+        INSERT INTO account 
+        (
+        username, 
+        password_hash, 
+        name,
+        mobile_no, 
+        profile_img_url, 
+        role 
+        )
+        VALUES
+        (
+        ${username},
+        ${password_hash},
+        ${admin_nm},
+        ${mobile_no},
+        ${profile_img_url},
+        ${ROLES.ADMIN}
+        )
+        RETURNING account_id , username, mobile_no, name
         `
-        const result = await tsx`
+        const admin_id = resultAccount[0].account_id;
+
+        await tsx`
          INSERT INTO admin (
-         username,
-         phone_no,
-         admin_nm,
-         password_hash,
+         admin_id,
          created_by 
         ) 
-         VALUES(
-         ${username},
-         ${phone_no},
-         ${admin_nm},
-         ${password_hash},
-         ${created_by_id})
-         
-         RETURNING username, phone_no, admin_nm
+         VALUES
+         (
+         ${admin_id},
+         ${created_by_id}
+         )         
          `;
-         return result;
+        return resultAccount[0];
     })
-    return result[0];
+    return result;
 }

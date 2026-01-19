@@ -1,34 +1,28 @@
 import AppError from '../../utils/appError.js';
-import {superAdminLogin} from './providers/super-admin.auth.js';
-import {adminLogin} from './providers/admin.auth.js';
-import {employeeLogin} from './providers/employee.auth.js'
-import {ROLES} from '../../utils/role.js'
-import { ERROR_CODES } from '../../utils/errorCodes.js';
-export async function login(username, password, role) {
-    let token;
-    switch (role) {
-        case ROLES.SUPER_ADMIN:
-            token = await superAdminLogin(username,password)
-            break;
-        
-        case ROLES.ADMIN:
-             token = await adminLogin(username,password)
-            break;
+import {signToken} from '../../utils/jwt.js';
+import sql from '../../database/db.js'
+import bcrypt from 'bcrypt'
 
-        case ROLES.EMPLOYEE:
-             token = await employeeLogin(username,password)
-            break; 
 
-        case "EMPLOYEE":
-
-            break;
-
-        case "PASSENGER":
-
-            break;
-
-        default:
-            throw new AppError(`Invalid role: ${role}. Please provide a valid role.`, 400,ERROR_CODES.AUTH_INVALID_ROLE)
+export async function login(username, password) {
+     const result = await sql`
+    SELECT account_id, username, role, password_hash FROM account WHERE username = ${username};
+    `
+    if (result.length === 0) {
+        throw new AppError('Incorrect username or username not found',404, ERROR_CODES.AUTH_USER_NOT_FOUND);
     }
-    return token;
+    const user = result[0]
+    const password_hash = result[0].password_hash;
+
+    if (bcrypt.compare(password,password_hash)) {
+        const token = signToken({
+            id: user.account_id,
+            username: user.username,
+            role: user.role
+        });
+        return token;
+    }
+    else{
+        throw new AppError('Invalid Password',400,ERROR_CODES.AUTH_INVALID_PASSWORD);
+    }
 }
