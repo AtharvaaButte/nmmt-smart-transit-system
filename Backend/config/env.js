@@ -17,3 +17,4 @@ export function getJWTTokenExpireTime() {
 export function getAdminName() {
     return process.env.SUPER_ADMIN_USERNAME;
 }
+
